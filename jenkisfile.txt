@@ -1,0 +1,25 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git url: 'https://github.com/<tu-usuario>/<tu-repositorio>.git', branch: 'main'
+            }
+        }
+
+        stage('Lint') {
+            steps {
+                sh 'pip install pylint'
+                sh 'pylint <ruta-a-tu-proyecto>'
+            }
+        }
+
+        stage('Build and Run') {
+            steps {
+                sh 'docker build -t mydjangoapp .'
+                sh 'docker run -p 8000:8000 mydjangoapp'
+            }
+        }
+    }
+}
